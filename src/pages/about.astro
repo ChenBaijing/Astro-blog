@@ -1,15 +1,323 @@
 ---
-import '../styles/global.css';
 import BaseLayout from '../layouts/BaseLayout.astro';
-const {pageTitle} = Astro.props;
+const pageTitle = '关于我';
 
+const skills = [
+  { name: "HTML", level: 90 },
+  { name: "CSS", level: 85 },
+  { name: "JavaScript", level: 88 },
+  { name: "React", level: 85 },
+  { name: "Astro", level: 75 },
+  { name: "Node.js", level: 80 }
+];
+
+const experiences = [
+  {
+    year: "2025",
+    title: "继续学习中",
+    description: "学习React, Vue等现代前端框架"
+  },
+  {
+    year: "2024",
+    title: "前端学习中",
+    description: "进行简单的Web项目开发"
+  },
+  {
+    year: "2023",
+    title: "前端学习中",
+    description: "学习项目工程化等更符合现代前端开发流程的技术"
+  },
+  {
+    year: "2022",
+    title: "前端学习中",
+    description: "学习React, Vue等现代前端框架"
+  },
+  {
+    year: "2021",
+    title: "初入前端",
+    description: "学习HTML, CSS, JavaScript等基本前端技术"
+  }
+];
 ---
 
-<BaseLayout pageTitle='关于我'>
-    <h1>{pageTitle}</h1>
-    <h2>……和我的新 Astro 网站！</h2>
+<BaseLayout pageTitle={pageTitle}>
+  <main class="about-container">
+    <section class="hero-section">
+      <h1 class="gradient-text">{pageTitle}</h1>
+      <p class="subtitle">探索技术的边界，定义创新的未来</p>
+    </section>
 
-    <p>我正在学习 Astro 的入门教程。这是我网站上的第二个页面，也是我自己建立的第一页面！</p>
+    <section class="content-grid">
+      <div class="about-card">
+        <h2>个人简介</h2>
+        <p>我是一名充满热情的开发者，专注于创建优雅且高效的 Web 应用。热爱学习新技术，并乐于分享技术经验。</p>
+        <div class="tech-tags">
+          <span class="tech-tag">Web 开发</span>
+          <span class="tech-tag">UI/UX 设计</span>
+          <span class="tech-tag">开源爱好者</span>
+        </div>
+      </div>
 
-    <p>随着我完成更多教程，该站点将更新，所以请继续查看我的旅程将如何进行吧！</p>
+      <div class="about-card">
+        <h2>技能专长</h2>
+        <div class="skills-container">
+          {skills.map(skill => (
+            <div class="skill-item">
+              <div class="skill-info">
+                <span class="skill-name">{skill.name}</span>
+                <span class="skill-percentage">{skill.level}%</span>
+              </div>
+              <div class="skill-bar">
+                <div class="skill-progress" style={`width: ${skill.level}%`}></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+        <div class="about-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="card-header">   
+            <h2>学习经历</h2>
+        </div>
+        <div class="timeline-container">
+        <div class="timeline">
+        {experiences.map(exp => (
+        <div class="timeline-item">
+          <div class="timeline-marker">
+            <div class="marker-glow"></div>
+          </div>
+          <div class="timeline-content">
+            <h3>{exp.title}</h3>
+            <span class="timeline-year">{exp.year}</span>
+            <p>{exp.description}</p>
+            </div>
+                </div>
+            ))}
+            </div>
+        </div>
+    </div>
+    </section>
+  </main>
 </BaseLayout>
+
+<style>
+  .about-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .hero-section {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .gradient-text {
+    font-size: 3.5rem;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 400%;
+    background-position: 0%;
+    margin-bottom: 1rem;
+  }
+
+  .subtitle {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .content-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  .about-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 1rem;
+    padding: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .about-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent);
+    box-shadow: 0 4px 20px rgba(var(--accent-rgb), 0.1);
+  }
+
+  .about-card h2 {
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+  }
+
+  .tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .tech-tag {
+    background: rgba(var(--accent-rgb), 0.1);
+    color: var(--accent);
+    padding: 0.4rem 1rem;
+    border-radius: 2rem;
+    font-size: 0.9rem;
+  }
+
+  .skills-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .skill-item {
+    width: 100%;
+  }
+
+  .skill-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+
+  .skill-name {
+    color: var(--text-primary);
+  }
+
+  .skill-percentage {
+    color: var(--accent);
+  }
+
+  .skill-bar {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .skill-progress {
+    height: 100%;
+    background: var(--accent-gradient);
+    border-radius: 3px;
+    transition: width 1s ease;
+  }
+
+  .timeline-container {
+    max-height: 400px; 
+    overflow-y: auto;
+    padding-right: 10px; 
+    margin-right: -10px; 
+  }
+
+ 
+  .timeline-container::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .timeline-container::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+  }
+
+  .timeline-container::-webkit-scrollbar-thumb {
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  .timeline-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(var(--accent-rgb), 0.8);
+  }
+
+  .timeline-container::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: linear-gradient(
+      to top,
+      rgba(255, 255, 255, 0.05) 0%,
+      transparent 100%
+    );
+    pointer-events: none;
+  }
+
+  .timeline {
+    position: relative;
+    padding-left: 2rem;
+  }
+
+  .timeline {
+    position: relative;
+    padding-left: 2rem;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--accent-gradient);
+    opacity: 0.3;
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-bottom: 2rem;
+  }
+
+  .timeline-marker {
+    position: absolute;
+    left: -2.5rem;
+    top: 0.25rem;
+    width: 1rem;
+    height: 1rem;
+    background: var(--accent);
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .timeline-year {
+    color: var(--accent);
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 768px) {
+    .gradient-text {
+      font-size: 2.5rem;
+    }
+
+    .content-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .about-container {
+      padding: 1rem;
+    }
+  }
+</style>
+
+
+<script>
+  function animateSkills() {
+    const skills = document.querySelectorAll('.skill-progress');
+    skills.forEach(skill => {
+      const width = (skill as HTMLElement).style.width;
+      (skill as HTMLElement).style.width = '0';
+      setTimeout(() => {
+        (skill as HTMLElement).style.width = width;
+      }, 100);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', animateSkills);
+</script>

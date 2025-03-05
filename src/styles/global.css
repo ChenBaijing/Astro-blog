@@ -13,6 +13,9 @@
   .dark {
     --text-primary: #ffffff;
   }
+  :root {
+  --accent: #646cff;
+}
 }
 
 html {
