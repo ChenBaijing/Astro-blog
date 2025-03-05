@@ -1,0 +1,135 @@
+:root {
+  --primary-color: #00f2fe;
+  --secondary-color: #4facfe;
+  --background-dark: #0a192f;
+  --background-light: #f8f9fa;
+  --text-dark: #ccd6f6;
+  --text-light: #233554;
+  --accent-gradient: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+  --accent: #646cff;
+  --accent-rgb: 100, 108, 255;
+  --accent-gradient: linear-gradient(45deg, #646cff, #9089fc);
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  .dark {
+    --text-primary: #ffffff;
+  }
+}
+
+html {
+  background-color: var(--background-light);
+  font-family: 'Inter', system-ui, sans-serif;
+  transition: all 0.3s ease;
+}
+
+html.dark {
+  background-color: var(--background-dark);
+  color: var(--text-dark);
+}
+
+body {
+  margin: 0;
+  padding: 0 1rem;
+  line-height: 1.6;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+a:hover {
+  color: var(--secondary-color);
+}
+
+::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* 针对 Firefox */
+  * {
+    scrollbar-width: none;
+  }
+
+  /* 针对 IE */
+  * {
+    -ms-overflow-style: none;
+  }
+
+/* 首先确保背景是透明的 */
+body {
+  background: transparent;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* 创建背景容器 */
+.background-animation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+}
+
+/* 创建几何图形 */
+.shape {
+  position: absolute;
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+.shape-1 {
+  width: 300px;
+  height: 300px;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  top: 20%;
+  left: 10%;
+  animation: floatAnimation 15s ease-in-out infinite;
+}
+
+.shape-2 {
+  width: 200px;
+  height: 200px;
+  border: 2px solid var(--accent);
+  transform: rotate(45deg);
+  bottom: 15%;
+  right: 10%;
+  animation: floatAnimation 20s ease-in-out infinite reverse;
+}
+
+.shape-3 {
+  width: 150px;
+  height: 150px;
+  background: linear-gradient(45deg, transparent, rgba(var(--accent-rgb), 0.1));
+  border-radius: 30%;
+  top: 60%;
+  left: 30%;
+  animation: floatAnimation 18s ease-in-out infinite 2s;
+}
+
+@keyframes floatAnimation {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.1;
+  }
+  25% {
+    transform: translate(50px, 20px) rotate(90deg);
+    opacity: 0.15;
+  }
+  50% {
+    transform: translate(0, 50px) rotate(180deg);
+    opacity: 0.1;
+  }
+  75% {
+    transform: translate(-30px, 20px) rotate(270deg);
+    opacity: 0.15;
+  }
+  100% {
+    transform: translate(0, 0) rotate(360deg);
+    opacity: 0.1;
+  }
+}

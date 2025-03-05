@@ -1,76 +1,220 @@
 ---
-import Layout from '../../layouts/Layout.astro';
+import '../../styles/global.css'
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const allPosts = await Astro.glob('../../pages/posts/*.md');
+const pageTitle = '博客';
+
+// 对文章进行排序，最新的在前面
+const sortedPosts = allPosts.sort((a, b) => {
+  return new Date(b.frontmatter.pubDate).getTime() - new Date(a.frontmatter.pubDate).getTime();
+});
 ---
 
-<Layout title="Welcome to Astro.">
-	<main>
-		<h1>Welcome to <span class="text-gradient">Posts Page</span></h1>
-        <a href="/">&larr;Back</a>
-        <ul>
-            <li><a class="posts-text" href="/posts/post-1">Post-1</a></li>
-            <li><a class="posts-text" href="/posts/post-2">Post-2</a></li>
-        </ul>
-	</main>
-</Layout>
+<BaseLayout pageTitle={pageTitle}>
+  <main class="blog-container">
+    <section class="blog-header">
+      <h1 class="page-title">{pageTitle}</h1>
+      <p class="page-description">在这里，我将分享我的学习和思考。</p>
+    </section>
+
+    <section class="posts-grid">
+      {sortedPosts.map((post) => (
+        <article class="post-card">
+          <div class="post-content">
+            <div class="post-meta">
+              <time datetime={post.frontmatter.pubDate}>
+                {new Date(post.frontmatter.pubDate).toLocaleDateString('zh-CN', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </time>
+              {post.frontmatter.tags && (
+                <div class="post-tags">
+                  {post.frontmatter.tags.map((tag: string) => (
+                    <span class="tag">{tag}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+            <h2 class="post-title">
+              <a href={post.url}>{post.frontmatter.title}</a>
+            </h2>
+            <p class="post-excerpt">{post.frontmatter.description}</p>
+            <a href={post.url} class="read-more">
+              阅读更多 
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </a>
+          </div>
+        </article>
+      ))}
+    </section>
+  </main>
+</BaseLayout>
 
 <style>
-	main {
-		margin: auto;
-		padding: 1rem;
-		width: 800px;
-		max-width: calc(100% - 2rem);
-		color: white;
-		font-size: 20px;
-		line-height: 1.6;
-	}
-	.astro-a {
-		position: absolute;
-		top: -32px;
-		left: 50%;
-		transform: translatex(-50%);
-		width: 220px;
-		height: auto;
-		z-index: -1;
-	}
-	h1 {
-		font-size: 4rem;
-		font-weight: 700;
-		line-height: 1;
-		text-align: center;
-		margin-bottom: 1em;
-	}
-	.text-gradient {
-		background-image: var(--accent-gradient);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-size: 400%;
-		background-position: 0%;
-	}
-	.instructions {
-		margin-bottom: 2rem;
-		border: 1px solid rgba(var(--accent-light), 25%);
-		background: linear-gradient(rgba(var(--accent-dark), 66%), rgba(var(--accent-dark), 33%));
-		padding: 1.5rem;
-		border-radius: 8px;
-	}
-	.instructions code {
-		font-size: 0.8em;
-		font-weight: bold;
-		background: rgba(var(--accent-light), 12%);
-		color: rgb(var(--accent-light));
-		border-radius: 4px;
-		padding: 0.3em 0.4em;
-	}
-	.instructions strong {
-		color: rgb(var(--accent-light));
-	}
-	.link-card-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
-		gap: 2rem;
-		padding: 0;
-	}
-    .posts-text {
-        color: white;
+  .blog-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .blog-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .page-title {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 400%;
+    background-position: 0%;
+  }
+
+  .page-description {
+    /* color: var(--text-secondary); */
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  .post-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .post-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent);
+    box-shadow: 0 4px 20px rgba(var(--accent-rgb), 0.1);
+  }
+
+  .post-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    /* color: var(--text-secondary); */
+    height: 24px;
+    overflow: hidden;
+  }
+  .post-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .post-date {
+    flex-shrink: 0;
+    margin-right: 1rem;
+  }
+
+  .post-tags {
+    display: flex;
+    height: 24px;
+    gap: 0.5rem;
+    overflow: hidden;
+    flex-wrap: nowrap;
+    max-width: 60%;
+  }
+
+
+  .tag {
+    background: rgba(var(--accent-rgb), 0.1);
+    color: var(--accent);
+    padding: 0.2rem 0.8rem;
+    border-radius: 1rem;
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+
+.post-tags::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 30px;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.05) 50%);
+    pointer-events: none;
+  }
+
+  .post-title {
+    margin: 0 0 1rem 0;
+    font-size: 1.5rem;
+    line-height: 1.3;
+  }
+
+  .post-title a {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .post-title a:hover {
+    color: var(--accent);
+  }
+
+  .post-excerpt {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex-grow: 1;
+  }
+
+  .read-more {
+    margin-top: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .read-more:hover {
+    gap: 0.8rem;
+  }
+
+  .read-more svg {
+    transition: transform 0.3s ease;
+  }
+
+  .read-more:hover svg {
+    transform: translateX(5px);
+  }
+
+  @media (max-width: 768px) {
+    .blog-container {
+      padding: 1rem;
     }
+
+    .page-title {
+      font-size: 2rem;
+    }
+
+    .posts-grid {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>

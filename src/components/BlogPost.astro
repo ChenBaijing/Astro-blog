@@ -1,0 +1,50 @@
+---
+const { title, url } = Astro.props;
+---
+<li class="post-card">
+    <a href={url}>
+        <h3>{title}</h3>
+        <div class="arrow">→</div>
+    </a>
+</li>
+
+<style>
+    .post-card {
+        list-style: none;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 1rem;
+        transition: all 0.3s ease;
+        margin-bottom: 1rem;
+    }
+
+    .post-card:hover {
+        transform: translateY(-2px);
+        background: var(--accent-gradient);
+    }
+
+    .post-card a {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem;
+        color: var(--text-light);
+    }
+
+    html.dark .post-card a {
+        color: var(--text-dark);
+    }
+
+    .post-card:hover a {
+        color: white;
+    }
+
+    .arrow {
+        font-size: 1.2rem;
+        transition: transform 0.3s ease;
+    }
+
+    .post-card:hover .arrow {
+        transform: translateX(5px);
+    }
+</style>
