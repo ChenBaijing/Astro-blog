@@ -22,18 +22,29 @@ const sortedPosts = allPosts.sort((a, b) => {
         <article class="post-card">
           <div class="post-content">
             <div class="post-meta">
-              <time datetime={post.frontmatter.pubDate}>
-                {new Date(post.frontmatter.pubDate).toLocaleDateString('zh-CN', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}
-              </time>
+              <div class="meta-left">
+                <time datetime={post.frontmatter.pubDate}>
+                  {new Date(post.frontmatter.pubDate).toLocaleDateString('zh-CN', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </time>
+              </div>
               {post.frontmatter.tags && (
-                <div class="post-tags">
-                  {post.frontmatter.tags.map((tag: string) => (
-                    <span class="tag">{tag}</span>
-                  ))}
+                <div class="meta-right">
+                  <div class="post-tags">
+                    {post.frontmatter.tags.slice(0, 3).map((tag: string) => (
+                      <a href={`/tags/${tag}`} class="tag" title={tag}>
+                        <span class="tag-text">{tag}</span>
+                      </a>
+                    ))}
+                    {post.frontmatter.tags.length > 3 && (
+                      <span class="tag more-tag" title={post.frontmatter.tags.slice(3).join(', ')}>
+                        +{post.frontmatter.tags.length - 3}
+                      </span>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
@@ -43,7 +54,10 @@ const sortedPosts = allPosts.sort((a, b) => {
             <p class="post-excerpt">{post.frontmatter.description}</p>
             <a href={post.url} class="read-more">
               阅读更多 
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
             </a>
           </div>
         </article>
@@ -75,10 +89,10 @@ const sortedPosts = allPosts.sort((a, b) => {
   }
 
   .page-description {
-    /* color: var(--text-secondary); */
     font-size: 1.2rem;
     max-width: 600px;
     margin: 0 auto;
+    color: var(--text-secondary);
   }
 
   .posts-grid {
@@ -88,11 +102,11 @@ const sortedPosts = allPosts.sort((a, b) => {
   }
 
   .post-card {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(var(--card-bg), 0.05);
     border-radius: 1rem;
     padding: 1.5rem;
     transition: all 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(var(--card-border), 0.1);
     position: relative;
     overflow: hidden;
   }
@@ -103,55 +117,88 @@ const sortedPosts = allPosts.sort((a, b) => {
     box-shadow: 0 4px 20px rgba(var(--accent-rgb), 0.1);
   }
 
+  .post-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
   .post-meta {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
     font-size: 0.9rem;
-    /* color: var(--text-secondary); */
-    height: 24px;
-    overflow: hidden;
+    min-height: 24px;
   }
-  .post-content {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-  
-  .post-date {
+
+  .meta-left {
     flex-shrink: 0;
     margin-right: 1rem;
+    white-space: nowrap;
+  }
+
+  .meta-right {
+    flex-grow: 1;
+    min-width: 0;
+    overflow: hidden;
   }
 
   .post-tags {
     display: flex;
-    height: 24px;
     gap: 0.5rem;
-    overflow: hidden;
+    justify-content: flex-end;
     flex-wrap: nowrap;
-    max-width: 60%;
+    overflow: hidden;
+    width: 100%;
   }
 
-
   .tag {
-    background: rgba(var(--accent-rgb), 0.1);
-    color: var(--accent);
+    display: inline-flex;
+    align-items: center;
     padding: 0.2rem 0.8rem;
+    background: rgba(var(--accent-rgb), 0.1);
     border-radius: 1rem;
+    color: var(--accent);
+    text-decoration: none;
     font-size: 0.8rem;
+    transition: all 0.3s ease;
+    max-width: 100px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tag-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-.post-tags::after {
-    content: '';
+  .tag:hover {
+    background: var(--accent);
+    color: white;
+  }
+
+  .more-tag {
+    padding: 0.2rem 0.6rem;
+    background: rgba(var(--accent-rgb), 0.05);
+    cursor: help;
+  }
+
+  .tag[title]:hover::after {
+    content: attr(title);
     position: absolute;
-    right: 0;
-    top: 0;
-    height: 100%;
-    width: 30px;
-    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.05) 50%);
-    pointer-events: none;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.4rem 0.8rem;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    margin-bottom: 8px;
+    z-index: 1000;
   }
 
   .post-title {
@@ -215,6 +262,28 @@ const sortedPosts = allPosts.sort((a, b) => {
 
     .posts-grid {
       grid-template-columns: 1fr;
+    }
+
+    .post-meta {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.8rem;
+    }
+
+    .meta-left {
+      margin-right: 0;
+    }
+
+    .meta-right {
+      width: 100%;
+    }
+
+    .post-tags {
+      justify-content: flex-start;
+    }
+
+    .tag {
+      max-width: 80px;
     }
   }
 </style>

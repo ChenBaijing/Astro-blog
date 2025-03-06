@@ -8,5 +8,6 @@ image:
     alt: "Thumbnail of Astro arcs."
 pubDate: 2022-07-08
 tags: ["astro", "blogging", "learning in public", "successes"]
+category: "前端开发"
 ---
 在学习 Astro 大约一周后，我决定尝试些新的东西。我编写并导入了一个小组件！

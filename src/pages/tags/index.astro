@@ -3,48 +3,309 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 const allPosts = await Astro.glob('../posts/*.md');
 const tags = [...new Set(allPosts.map((post) => post.frontmatter.tags).flat())];
 const pageTitle = "标签列表";
+
+// 定义标签分类
+const tagCategories = {
+  "前端开发": ["JavaScript", "TypeScript", "React", "Vue"],
+  "后端开发": ["Node.js", "Python", "Java", "数据库"],
+  "开发工具": ["Git", "Docker", "VS Code", "命令行"],
+  "其他": ["随笔", "生活", "阅读"]
+};
+
+allPosts.forEach(post => {
+  const category = post.frontmatter.category || "其他";
+  post.frontmatter.tags.forEach(tag => {
+    if (!tagCategories[category]) {
+      tagCategories[category] = [];
+    }
+    if (!tagCategories[category].includes(tag)) {
+      tagCategories[category].push(tag);
+    }
+  });
+});
+
+// 计算每个标签的文章数量
+const tagCounts = tags.reduce((acc, tag) => {
+  acc[tag] = allPosts.filter(post => post.frontmatter.tags.includes(tag)).length;
+  return acc;
+}, {});
 ---
+
 <BaseLayout pageTitle={pageTitle}>
-  <div class="tags">
-    {tags.map((tag) => (
-      <p class="tag"><a href={`/tags/${tag}`}>{tag}</a></p>
-    ))}
-  </div>
+  <main class="tags-container">
+    <div class="page-header">
+      <h1 class="title">{pageTitle}</h1>
+      <p class="subtitle">探索不同主题的文章集合</p>
+    </div>
+
+    <div class="tags-sections">
+      <!-- 所有标签展示区 -->
+      <div class="all-tags">
+        <h2 class="section-title">所有标签</h2>
+        <div class="tags-grid">
+          {tags.map((tag) => (
+            <a href={`/tags/${tag}`} class="tag-item">
+              <span class="tag-name">{tag}</span>
+              <span class="tag-count">{tagCounts[tag]}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <!-- 分类标签区 -->
+      <div class="categories-section">
+        <h2 class="section-title">分类浏览</h2>
+        <div class="categories-grid">
+          {Object.entries(tagCategories).map(([category, categoryTags]) => (
+            <div class="category-card">
+              <button class="category-header">
+                <span class="category-name">{category}</span>
+                <svg class="arrow-icon" viewBox="0 0 24 24">
+                  <path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+              <div class="category-tags">
+                <div>
+                  <div class="tags-wrapper">
+                    {categoryTags.map((tag, index) => (
+                      tags.includes(tag) && (
+                        <a 
+                          href={`/tags/${tag}`} 
+                          class="category-tag"
+                          style={`transition-delay: ${index * 0.05}s`}
+                        >
+                          <span class="tag-name">{tag}</span>
+                          <span class="tag-count">{tagCounts[tag] || 0}</span>
+                        </a>
+                      )
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </main>
 </BaseLayout>
 
 <style>
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
+  .tags-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
   }
 
-  .tag {
-    margin: 0;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 2rem;
+  .page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+  }
+
+  .subtitle {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+    border-left: 4px solid var(--accent);
+    padding-left: 1rem;
+  }
+
+  /* 所有标签样式 */
+  .all-tags {
+    margin-bottom: 4rem;
+  }
+
+  .tags-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+
+  .tag-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.8rem;
+    background: rgba(var(--accent-rgb), 0.1);
+    border: 1px solid rgba(var(--accent-rgb), 0.2);
+    border-radius: 16px;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+  }
+
+  .tag-count {
+    background: rgba(var(--accent-rgb), 0.2);
+    padding: 0.1rem 0.5rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+  }
+
+  .tag-item:hover {
+    background: var(--accent);
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  .tag-item:hover .tag-count {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  /* 分类样式 */
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .category-card {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .category-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 500;
     transition: all 0.3s ease;
   }
 
-  .tag a {
-    display: block;
-    padding: 0.5rem 1.5rem;
-    color: var(--text-light);
+  .category-header:hover {
+    background: rgba(var(--accent-rgb), 0.1);
   }
 
-  html.dark .tag a {
-    color: var(--text-dark);
+  .arrow-icon {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s ease;
   }
 
-  .tag:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    background: var(--accent-gradient);
+  .category-card.active .arrow-icon {
+    transform: rotate(180deg);
   }
 
-  .tag:hover a {
+  .category-tags {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s ease;
+  }
+
+  .category-tags > div {
+    overflow: hidden;
+  }
+
+  .category-card.active .category-tags {
+    grid-template-rows: 1fr;
+  }
+
+  .tags-wrapper {
+    padding: 1rem 1.5rem;
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+  }
+
+  .category-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.3rem 0.8rem;
+    background: rgba(var(--accent-rgb), 0.1);
+    border-radius: 12px;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.9rem;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .category-card.active .category-tag {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .category-tag:hover {
+    background: var(--accent);
     color: white;
   }
+
+  .category-tag:hover .tag-count {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  @media (max-width: 768px) {
+    .tags-container {
+      padding: 1rem;
+    }
+
+    .title {
+      font-size: 2rem;
+    }
+
+    .categories-grid {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>
+
+<script>
+  const categoryHeaders = document.querySelectorAll('.category-header');
+  
+  categoryHeaders.forEach(header => {
+    header.addEventListener('click', () => {
+      const card = header.parentElement;
+      if (!card) return;
+
+      // 如果当前卡片已经是激活状态，则移除动画延迟
+      if (card.classList.contains('active')) {
+        const tags = card.querySelectorAll('.category-tag');
+        tags.forEach(tag => {
+          (tag as HTMLElement).style.transitionDelay = '0s';
+        });
+      }
+
+      // 切换激活状态
+      card.classList.toggle('active');
+
+      // 如果卡片被激活，添加标签的动画延迟
+      if (card.classList.contains('active')) {
+        const tags = card.querySelectorAll('.category-tag');
+        tags.forEach((tag, index) => {
+          (tag as HTMLElement).style.transitionDelay = `${index * 0.05}s`;
+        });
+      }
+    });
+  });
+
+  // 默认展开第一个分类
+  const firstCard = document.querySelector('.category-card');
+  if (firstCard) {
+    firstCard.classList.add('active');
+    const tags = firstCard.querySelectorAll('.category-tag');
+    tags.forEach((tag, index) => {
+      (tag as HTMLElement).style.transitionDelay = `${index * 0.05}s`;
+    });
+  }
+</script>
