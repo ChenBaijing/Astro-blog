@@ -45,4 +45,13 @@ import ThemeIcon from './ThemeIcon.astro';
     .nav-links a:hover::after {
         width: 100%;
     }
+
+    .nav-links a {
+        transition: color 0.3s ease;
+    }
+
+    /* 当页面开始过渡时的状态 */
+    .nav-links a[aria-current="page"] {
+        color: var(--accent);
+    }
 </style>

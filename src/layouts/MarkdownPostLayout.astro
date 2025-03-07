@@ -19,6 +19,8 @@ const getReadingTime = (content) => {
 
 const readingTime = getReadingTime(frontmatter?.content || '');
 const tags = frontmatter?.tags || [];
+
+
 ---
 
 <BaseLayout pageTitle={frontmatter?.title || '文章'}>
@@ -32,7 +34,7 @@ const tags = frontmatter?.tags || [];
               <circle cx="12" cy="12" r="10"/>
               <polyline points="12 6 12 12 16 14"/>
             </svg>
-            {readingTime} 分钟阅读
+            {10} 分钟阅读
           </span>
         </div>
         <h1 class="post-title">{frontmatter?.title}</h1>
@@ -53,7 +55,7 @@ const tags = frontmatter?.tags || [];
       <div class="content prose">
         <slot />
       </div>
-
+        
       <footer class="post-footer">
         <div class="post-navigation">
           <a href="/posts" class="back-to-blog">
@@ -65,21 +67,54 @@ const tags = frontmatter?.tags || [];
         </div>
       </footer>
     </article>
+    <button class="back-to-top" id="back-to-top" onclick="scrollToTop()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+    </button>
   </main>
 </BaseLayout>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const backToTopButton = document.getElementById('back-to-top');
+
+        const scrollToTop = () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        };
+
+        backToTopButton.addEventListener('click', scrollToTop);
+
+        window.addEventListener('scroll', () => {
+            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                backToTopButton.style.opacity = '1';
+                backToTopButton.style.pointerEvents = 'auto';
+            } else {
+                backToTopButton.style.opacity = '0';
+                backToTopButton.style.pointerEvents = 'none';
+            }
+        });
+    });
+</script>
 
 <style>
   .post-container {
     max-width: 860px;
     margin: 0 auto;
     padding: 2rem 1rem;
+    position: relative;
   }
 
   .post-content {
-    background: var(--bg-content);
     border-radius: 1rem;
     padding: 2rem;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.05);
   }
 
   .post-header {
@@ -157,6 +192,7 @@ const tags = frontmatter?.tags || [];
     font-size: 1.1rem;
     line-height: 1.8;
     color: var(--text-primary);
+    
   }
 
   /* Markdown 内容样式 */
@@ -246,6 +282,43 @@ const tags = frontmatter?.tags || [];
     margin: 2rem 0;
   }
 
+    .content :global(table) {
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    background-color: var(--bg-content);
+    border: 1px solid rgba(var(--accent-rgb), 0.1);
+  }
+
+  .content :global(th), .content :global(td) {
+    border: 1px solid rgba(var(--accent-rgb), 0.1);
+    padding: 0.75rem;
+    text-align: left;
+    vertical-align: top;
+    background-color: var(--bg-content);
+    color: var(--text-primary);
+  }
+
+  .content :global(th) {
+    background-color: rgba(var(--accent-rgb), 0.05);
+    color: var(--accent);
+    font-weight: bold;
+  }
+
+  .content :global(tr):nth-child(odd) {
+    background-color: rgba(var(--accent-rgb), 0.03);
+  }
+
+  .content :global(tr):nth-child(even) {
+    background-color: rgba(var(--accent-rgb), 0.05);
+  }
+
+  .content :global(tr:hover) {
+    background-color: rgba(var(--accent-rgb), 0.1);
+  }
+
   .post-footer {
     margin-top: 4rem;
     padding-top: 2rem;
@@ -275,6 +348,41 @@ const tags = frontmatter?.tags || [];
   .back-to-blog svg {
     width: 20px;
     height: 20px;
+  }
+
+  .back-to-top {
+    background-color: var(--accent);
+    position: absolute;
+    bottom: 4rem;
+    left: -4rem;
+    z-index: 1000;
+    width: 50px;
+    height: 50px;
+    border: none;
+    background: var(--bg-button);
+    border-radius: 50%;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    color: var(--text-button);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(90deg);
+  }
+
+  .back-to-top svg {
+    width: 24px;
+    height: 24px;
+    background-color: var(--text-button);
+  }
+
+  .back-to-top:hover {
+    background: var(--accent);
+    color: white;
+    transform: scale(1.1);
+    transform: rotate(90deg);
   }
 
   /* 响应式设计 */

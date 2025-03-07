@@ -43,8 +43,10 @@ const experiences = [
 <BaseLayout pageTitle={pageTitle}>
   <main class="about-container">
     <section class="hero-section">
-      <h1 class="gradient-text">{pageTitle}</h1>
-      <p class="subtitle">探索技术的边界，定义创新的未来</p>
+        <div>
+            <h1 class="gradient-text">{pageTitle}</h1>
+            <p class="subtitle">探索技术的边界，定义创新的未来</p>
+        </div>
     </section>
 
     <section class="content-grid">
@@ -108,8 +110,10 @@ const experiences = [
   }
 
   .hero-section {
-    text-align: center;
     margin-bottom: 4rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
   }
 
   .gradient-text {
@@ -124,7 +128,6 @@ const experiences = [
 
   .subtitle {
     font-size: 1.2rem;
-    color: var(--text-secondary);
     max-width: 600px;
     margin: 0 auto;
   }

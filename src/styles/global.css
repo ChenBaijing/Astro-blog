@@ -76,67 +76,19 @@ body {
 	z-index: -1;
 	overflow: hidden;
 }
-
-/* 创建几何图形 */
-.shape {
-	position: absolute;
-	opacity: 0.1;
-	pointer-events: none;
+/* 添加到全局样式中 */
+::view-transition-group(*) {
+	animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.shape-1 {
-	width: 300px;
-	height: 300px;
-	border: 2px solid var(--accent);
-	border-radius: 50%;
-	top: 20%;
-	left: 10%;
-	animation: floatAnimation 15s ease-in-out infinite;
+/* 优化性能 */
+* {
+	transform-style: preserve-3d;
+	backface-visibility: hidden;
 }
 
-.shape-2 {
-	width: 200px;
-	height: 200px;
-	border: 2px solid var(--accent);
-	transform: rotate(45deg);
-	bottom: 15%;
-	right: 10%;
-	animation: floatAnimation 20s ease-in-out infinite reverse;
-}
-
-.shape-3 {
-	width: 150px;
-	height: 150px;
-	background: linear-gradient(
-		45deg,
-		transparent,
-		rgba(var(--accent-rgb), 0.1)
-	);
-	border-radius: 30%;
-	top: 60%;
-	left: 30%;
-	animation: floatAnimation 18s ease-in-out infinite 2s;
-}
-
-@keyframes floatAnimation {
-	0% {
-		transform: translate(0, 0) rotate(0deg);
-		opacity: 0.1;
-	}
-	25% {
-		transform: translate(50px, 20px) rotate(90deg);
-		opacity: 0.15;
-	}
-	50% {
-		transform: translate(0, 50px) rotate(180deg);
-		opacity: 0.1;
-	}
-	75% {
-		transform: translate(-30px, 20px) rotate(270deg);
-		opacity: 0.15;
-	}
-	100% {
-		transform: translate(0, 0) rotate(360deg);
-		opacity: 0.1;
-	}
+/* 减少重排重绘 */
+.background-animation {
+	transform: translateZ(0);
+	will-change: transform;
 }

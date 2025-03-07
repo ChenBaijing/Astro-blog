@@ -5,16 +5,21 @@ const allPosts = await Astro.glob('../../pages/posts/*.md');
 const pageTitle = '博客';
 
 // 对文章进行排序，最新的在前面
-const sortedPosts = allPosts.sort((a, b) => {
-  return new Date(b.frontmatter.pubDate).getTime() - new Date(a.frontmatter.pubDate).getTime();
-});
+const sortedPosts = allPosts
+  .map(post => ({
+    ...post,
+    pubDateTimestamp: new Date(post.frontmatter.pubDate).getTime()
+  }))
+  .sort((a, b) => b.pubDateTimestamp - a.pubDateTimestamp);
 ---
 
 <BaseLayout pageTitle={pageTitle}>
   <main class="blog-container">
     <section class="blog-header">
-      <h1 class="page-title">{pageTitle}</h1>
-      <p class="page-description">在这里，我将分享我的学习和思考。</p>
+        <div>
+            <h1 class="page-title">{pageTitle}</h1>
+            <p class="page-description">在这里，我将分享我的学习和思考。</p>
+        </div>
     </section>
 
     <section class="posts-grid">
@@ -74,7 +79,9 @@ const sortedPosts = allPosts.sort((a, b) => {
   }
 
   .blog-header {
-    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
     margin-bottom: 4rem;
   }
 
@@ -92,7 +99,6 @@ const sortedPosts = allPosts.sort((a, b) => {
     font-size: 1.2rem;
     max-width: 600px;
     margin: 0 auto;
-    color: var(--text-secondary);
   }
 
   .posts-grid {
@@ -102,13 +108,14 @@ const sortedPosts = allPosts.sort((a, b) => {
   }
 
   .post-card {
-    background: rgba(var(--card-bg), 0.05);
+    background: rgba(255, 255, 255, 0.05);
     border-radius: 1rem;
     padding: 1.5rem;
     transition: all 0.3s ease;
-    border: 1px solid rgba(var(--card-border), 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     position: relative;
     overflow: hidden;
+    
   }
 
   .post-card:hover {
