@@ -15,4 +15,6 @@ export default defineConfig({
 		remarkPlugins: [[remarkToc, { heading: 'toc', maxDepth: 3 }]],
 		rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings, rehypeKatex],
 	},
+	site: 'https://ChenBaijing.github.io',
+	base: '/Astro-blog',
 })
