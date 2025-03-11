@@ -4,8 +4,8 @@ title: 'git使用指南'
 pubDate: 2023-04-07
 description: 'git使用指南'
 author: 'Chen'
-tags: ["frontend"]
-category: "前端开发"
+tags: ["tools"]
+category: "开发工具"
 ---
 # 如何使用git将自己的代码上传到GitHub中
 
