@@ -12,7 +12,7 @@ import preact from '@astrojs/preact'
 export default defineConfig({
 	integrations: [react(), preact()],
 	markdown: {
-		remarkPlugins: [[remarkToc, { heading: 'toc', maxDepth: 3 }]],
+		remarkPlugins: [[remarkToc, { heading: '[TOC]', maxDepth: 3 }]],
 		rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings, rehypeKatex],
 	},
 	site: 'https://ChenBaijing.github.io',
