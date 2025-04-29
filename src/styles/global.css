@@ -19,6 +19,13 @@
 	}
 	:root {
 		--accent: #646cff;
+		--toc-bg: #f8f9fa;
+		--toc-border: #e9ecef;
+		--toc-link: #333;
+		--toc-hover-bg: #e9ecef;
+		--toc-hover: #000;
+		--toc-active-bg: #e9ecef;
+		--toc-active: #000;
 	}
 }
 
