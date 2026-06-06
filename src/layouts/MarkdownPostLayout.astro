@@ -1,6 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
-const { frontmatter } = Astro.props;
+const { frontmatter, rawContent } = Astro.props;
 
 // 格式化日期
 const formattedDate = frontmatter?.pubDate ? new Date(frontmatter.pubDate).toLocaleDateString('zh-CN', {
@@ -8,6 +8,8 @@ const formattedDate = frontmatter?.pubDate ? new Date(frontmatter.pubDate).toLoc
   month: 'long',
   day: 'numeric'
 }) : '';
+
+const content = rawContent()
 
 // 预计阅读时间
 const getReadingTime = (content) => {
@@ -17,8 +19,9 @@ const getReadingTime = (content) => {
   return Math.ceil(wordCount / wordsPerMinute);
 };
 
-const readingTime = getReadingTime(frontmatter?.content || '');
+const readingTime = getReadingTime(content || '');
 const tags = frontmatter?.tags || [];
+
 
 
 ---
@@ -34,7 +37,7 @@ const tags = frontmatter?.tags || [];
               <circle cx="12" cy="12" r="10"/>
               <polyline points="12 6 12 12 16 14"/>
             </svg>
-            {10} 分钟阅读
+            {readingTime} 分钟阅读
           </span>
         </div>
         <h1 class="post-title">{frontmatter?.title}</h1>
@@ -58,7 +61,7 @@ const tags = frontmatter?.tags || [];
         
       <footer class="post-footer">
         <div class="post-navigation">
-          <a href="/posts" class="back-to-blog">
+          <a href="/Astro-blog/posts" class="back-to-blog">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M19 12H5M12 19l-7-7 7-7"/>
             </svg>
@@ -175,6 +178,7 @@ const tags = frontmatter?.tags || [];
     text-decoration: none;
     font-size: 0.9rem;
     transition: all 0.2s ease;
+    border: 1px solid rgba(3,3,3,0.1);
   }
 
   .tag-hash {

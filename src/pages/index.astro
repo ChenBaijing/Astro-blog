@@ -280,6 +280,17 @@ const sortedPosts = allPosts
 </style>
 
 <script>
+
+    const randomPlayCode = [
+        "gcc -o HelloWorld.c",
+        "python3 HelloWorld.py",
+        "gcc -o HelloWorld.cpp",
+        "node HelloWorld.js",
+        "npm start",
+        "javac HelloWorld.java",
+        "rustc HelloWorld.rs"
+    ]
+
   function typeText(text: string, element: HTMLElement, speed: number = 100) {
     let index = 0;
     const cursor = document.querySelector('.cursor');
@@ -304,7 +315,7 @@ const sortedPosts = allPosts
   document.addEventListener('DOMContentLoaded', () => {
     const terminalText = document.getElementById('terminal-text');
     if (terminalText) {
-      typeText('./Hello', terminalText, 150);
+      typeText(`> ${randomPlayCode[Math.floor(Math.random() * 7)]}`, terminalText, 150);
     }
   });
 </script>

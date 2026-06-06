@@ -55,9 +55,6 @@ const currentYear = new Date().getFullYear();
     <div class="powered-by">
       <span>Powered by</span>
       <a href="https://astro.build" target="_blank" rel="noopener" class="tech-badge">
-        <svg width="24" height="24" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path fill-rule="evenodd" clip-rule="evenodd" d="M27.3222 5.70711C26.892 5.31658 26.2588 5.31658 25.8285 5.70711L15.8285 14.7071C15.3982 15.0976 15.3982 15.7308 15.8285 16.1213C16.2588 16.5118 16.892 16.5118 17.3222 16.1213L27.3222 7.12132C27.7525 6.7308 27.7525 6.09763 27.3222 5.70711Z" fill="currentColor"/>
-        </svg>
         Astro
       </a>
     </div>
@@ -186,7 +183,7 @@ const currentYear = new Date().getFullYear();
     color: var(--text-primary);
   }
 
-  .footer-links a::before {
+.footer-links a::before {
     content: '';
     position: absolute;
     bottom: -2px;
@@ -236,7 +233,6 @@ const currentYear = new Date().getFullYear();
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .tech-badge {
