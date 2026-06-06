@@ -1,14 +1,11 @@
+/* TOC 左侧侧边栏样式 */
+
 .toc {
-	position: sticky;
-	top: 20px;
-	max-height: 80vh;
-	overflow-y: auto;
+	background: rgba(255, 255, 255, 0.05);
+	border-radius: 1rem;
 	padding: 1rem;
-	margin: 1rem 0;
-	background: var(--toc-bg, #f8f9fa);
-	border: 1px solid var(--toc-border, #e9ecef);
-	border-radius: 8px;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+	font-size: 0.88rem;
+	line-height: 1.7;
 }
 
 .toc ul {
@@ -18,42 +15,47 @@
 }
 
 .toc li {
-	margin: 0.5rem 0;
-	line-height: 1.4;
-	transition: all 0.2s ease;
+	margin: 0.2rem 0;
+	transition: all 0.15s ease;
 }
 
 .toc a {
 	text-decoration: none;
-	color: var(--toc-link, #333);
+	color: var(--toc-link);
 	display: block;
-	padding: 0.25rem 0.5rem;
+	padding: 0.25rem 0.6rem;
 	border-radius: 4px;
+	transition: all 0.15s ease;
+	border-left: 2px solid transparent;
 }
 
 .toc a:hover {
-	background: var(--toc-hover-bg, #e9ecef);
-	color: var(--toc-hover, #000);
+	background: var(--toc-hover-bg);
+	color: var(--toc-hover);
+	border-left-color: var(--accent);
 }
 
 /* 不同层级缩进 */
 .toc li > ul {
 	padding-left: 1rem;
-	margin-top: 0.25rem;
+	margin-top: 0.1rem;
 }
 
-/* 当前活动项 */
-.toc .active {
-	background: var(--toc-active-bg, #e9ecef);
-	color: var(--toc-active, #000);
+/* 当前活动项高亮 */
+.toc .active > a,
+.toc a.active {
+	background: var(--toc-active-bg);
+	color: var(--toc-active);
+	border-left-color: var(--accent);
 	font-weight: 500;
 }
 
-/* 响应式设计 */
+/* 响应式：小屏幕已在布局层隐藏 */
 @media (max-width: 768px) {
 	.toc {
-		position: static;
-		max-height: none;
-		margin: 1rem 0;
+		border-radius: 0;
+		border: none;
+		border-bottom: 1px solid var(--toc-border);
+		padding: 0.5rem 0;
 	}
 }

@@ -21,6 +21,7 @@ const getReadingTime = (content) => {
 
 const readingTime = getReadingTime(content || '');
 const tags = frontmatter?.tags || [];
+const tocHtml = frontmatter?.tocHtml || '';
 
 
 
@@ -28,6 +29,13 @@ const tags = frontmatter?.tags || [];
 
 <BaseLayout pageTitle={frontmatter?.title || '文章'}>
   <main class="post-container">
+    {/* TOC 左侧侧边栏 */}
+    {tocHtml && (
+      <aside class="toc-sidebar">
+        <nav class="toc-nav" set:html={tocHtml} />
+      </aside>
+    )}
+
     <article class="post-content">
       <header class="post-header">
         <div class="post-meta">
@@ -41,7 +49,7 @@ const tags = frontmatter?.tags || [];
           </span>
         </div>
         <h1 class="post-title">{frontmatter?.title}</h1>
-        {frontmatter?.description && 
+        {frontmatter?.description &&
           <p class="post-description">{frontmatter.description}</p>
         }
         {tags.length > 0 && (
@@ -58,7 +66,7 @@ const tags = frontmatter?.tags || [];
       <div class="content prose">
         <slot />
       </div>
-        
+
       <footer class="post-footer">
         <div class="post-navigation">
           <a href="/Astro-blog/posts" class="back-to-blog">
@@ -102,23 +110,68 @@ const tags = frontmatter?.tags || [];
                 backToTopButton.style.pointerEvents = 'none';
             }
         });
+
+        // TOC 链接平滑滚动
+        const tocNav = document.querySelector('.toc-nav');
+        if (tocNav) {
+            tocNav.addEventListener('click', (e) => {
+                const el = e.target;
+                if (!(el instanceof Element)) return;
+                const link = el.closest('a[href^="#"]');
+                if (!link) return;
+
+                e.preventDefault();
+                const id = link.getAttribute('href')?.slice(1);
+                if (!id) return;
+                const target = document.getElementById(id);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        }
     });
 </script>
 
 <style>
-  .post-container {
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 2rem 1rem;
-    position: relative;
-  }
+    .post-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+        position: relative;
+        display: flex;
+        gap: 2rem;
+        align-items: flex-start;
+    }
 
-  .post-content {
+    /* TOC 左侧侧边栏 */
+    .toc-sidebar {
+        width: 220px;
+        flex-shrink: 0;
+        position: sticky;
+        top: 2rem;
+        max-height: calc(100vh - 4rem);
+        overflow-y: auto;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        color: #333;
+        border-radius: 1rem;
+        
+    }
+
+    .post-content {
     border-radius: 1rem;
     padding: 2rem;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     background: rgba(255, 255, 255, 0.05);
+    flex: 1;
+    min-width: 0;
+    max-width: 860px;
+    color: #333;
   }
+
+  :global(html:not(.dark) .post-content) {
+    color: #333;
+  }
+
 
   .post-header {
     margin-bottom: 3rem;
@@ -393,10 +446,16 @@ const tags = frontmatter?.tags || [];
   @media (max-width: 768px) {
     .post-container {
       padding: 1rem;
+      flex-direction: column;
+    }
+
+    .toc-sidebar {
+      display: none;
     }
 
     .post-content {
       padding: 1.5rem;
+      max-width: 100%;
     }
 
     .post-title {

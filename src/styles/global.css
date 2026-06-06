@@ -13,21 +13,52 @@
 	--accent: #646cff;
 	--accent-rgb: 100, 108, 255;
 	--accent-gradient: linear-gradient(45deg, #646cff, #9089fc);
+	--text-primary: #333;
+	--text-secondary: #666;
+	--bg-code: #f0f0f0;
+	--bg-pre: #f5f5f5;
+	--bg-blockquote: #f8f9fa;
+	--bg-button: #f0f0f0;
+	--bg-tag: #f0f0f0;
+	--text-tag: #555;
+	--text-code: #333;
+	--text-blockquote: #555;
+	--border-color: #e0e0e0;
+	--bg-content: #ffffff;
+
+	/* TOC 亮色模式 */
+	--toc-bg: #f5f5f5;
+	--toc-border: #d0d0d0;
+	--toc-link: #555;
+	--toc-hover-bg: #e8e8e8;
+	--toc-hover: #222;
+	--toc-active-bg: #e0e0ff;
+	--toc-active: #646cff;
+}
+
+html.dark {
+	--text-primary: #ffffff;
 	--text-secondary: rgba(255, 255, 255, 0.7);
 	--bg-code: #5f5f5f;
-	.dark {
-		--text-primary: #ffffff;
-	}
-	:root {
-		--accent: #646cff;
-		--toc-bg: #f8f9fa;
-		--toc-border: #e9ecef;
-		--toc-link: #333;
-		--toc-hover-bg: #e9ecef;
-		--toc-hover: #000;
-		--toc-active-bg: #e9ecef;
-		--toc-active: #000;
-	}
+	--bg-pre: #1e1e1e;
+	--bg-blockquote: rgba(255, 255, 255, 0.05);
+	--bg-button: rgba(255, 255, 255, 0.1);
+	--bg-tag: rgba(255, 255, 255, 0.08);
+	--text-tag: rgba(255, 255, 255, 0.8);
+	--text-code: #e1e4e8;
+	--text-button: #ffffff;
+	--text-blockquote: rgba(255, 255, 255, 0.7);
+	--border-color: rgba(255, 255, 255, 0.1);
+	--bg-content: rgba(255, 255, 255, 0.03);
+
+	/* TOC 暗色模式 */
+	--toc-bg: rgba(255, 255, 255, 0.05);
+	--toc-border: rgba(255, 255, 255, 0.1);
+	--toc-link: rgba(255, 255, 255, 0.7);
+	--toc-hover-bg: rgba(255, 255, 255, 0.1);
+	--toc-hover: #ffffff;
+	--toc-active-bg: rgba(100, 108, 255, 0.2);
+	--toc-active: #9089fc;
 }
 
 html {
@@ -84,6 +115,7 @@ body {
 	z-index: -1;
 	overflow: hidden;
 }
+
 /* 添加到全局样式中 */
 ::view-transition-group(*) {
 	animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
