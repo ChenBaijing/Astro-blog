@@ -46,7 +46,7 @@ const tagCounts = tags.reduce((acc, tag) => {
         <h2 class="section-title">所有标签</h2>
         <div class="tags-grid">
           {tags.map((tag) => (
-            <a href={`/tags/${tag}`} class="tag-item">
+            <a href={`/Astro-blog/tags/${tag}`} class="tag-item">
               <span class="tag-name">{tag}</span>
               <span class="tag-count">{tagCounts[tag]}</span>
             </a>
