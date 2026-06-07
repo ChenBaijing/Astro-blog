@@ -1,6 +1,7 @@
 // ... existing imports ...
 import { visit } from 'unist-util-visit'
 import { toString } from 'mdast-util-to-string'
+import GithubSlugger from 'github-slugger'
 
 export default function customToc() {
 	return {
@@ -12,18 +13,17 @@ export default function customToc() {
 						remarkPlugins: [
 							() => (tree, file) => {
 								const headings = []
+								const slugger = new GithubSlugger()
 
 								visit(tree, 'heading', (headingNode) => {
 									try {
 										const text =
 											toString(headingNode) || ' '
-										const id =
-											headingNode.data?.id ||
-											text
-												.toLowerCase()
-												.replace(/[^\w一-]+/g, '-')
-												.replace(/^-|-$/g, '')
-										if (text) {
+
+										// 使用与 rehype-slug 相同的 github-slugger 生成 ID，确保与页面 heading id 一致
+										const id = slugger.slug(text)
+
+										if (text.trim()) {
 											headings.push({
 												depth: headingNode.depth,
 												text: text,
